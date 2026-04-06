@@ -258,11 +258,12 @@
 
                     hasItems = true;
                     let mango;
-
-                    if(module='acceso'){
+                    if(module==='acceso'){
                         alert(module);
                         mango="ZKT0740049";
-                    } else if (module='asistencia'){
+
+                        
+                    } else if (module==='asistencia'){
                         mango="ZKT0820118";
                     } else {
                         alert('sepa la bola :O');
@@ -271,7 +272,7 @@
                     let div = document.createElement('div');
                     div.classList.add('cart-item');
 
-                    let text = `<b>${module.toUpperCase()}</b><br>`;
+                    let text = `<br><b>${module.toUpperCase()}</b><br>`;
                     text += `Licencia de ${item.base.size} - ${item.base.code}`;
 
                     if (item.expansiones > 0) {
