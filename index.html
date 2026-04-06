@@ -257,13 +257,15 @@
                 if (item !== null) {
 
                     hasItems = true;
-
-                    alert(module);
+                    let mango;
 
                     if(module='acceso'){
                         alert(module);
+                        mango="ZKT0740049";
+                    } else if (module='asistencia'){
+                        mango="ZKT0820118";
                     } else {
-                        alert('sepa la bola');
+                        alert('sepa la bola :O');
                     }
 
                     let div = document.createElement('div');
@@ -273,7 +275,7 @@
                     text += `Licencia de ${item.base.size} - ${item.base.code}`;
 
                     if (item.expansiones > 0) {
-                        text += ` + ${item.expansiones} x Licencia de 5 - ${item.base}`;
+                        text += ` + ${item.expansiones} x Licencia de 5 - ${mango}`;
                     }
 
                     text += `<br><button onclick="removeSelection('${module}')">Eliminar</button>`;
