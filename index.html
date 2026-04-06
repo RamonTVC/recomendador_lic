@@ -85,9 +85,20 @@
     <div id="result-container" class="result-container">
         <p id="result"></p>
         <button onclick="goToMainMenu()">Volver al menú principal</button>
+        <button onclick="saveSelection('acceso')">Guardar selección</button>
+    </div>
+    <div id="cart-container" style="display:none; margin-top: 30px;">
+        <h3>Selección actual</h3>
     </div>
     
     <script>
+        let savedSelections = {
+            acceso: null,
+            asistencia: null,
+            elevadores: null,
+            visitantes: null
+        };
+        let currentResult = null;
         function hideAll() {
             document.querySelectorAll('.question-container, .input-container, .result-container').forEach(el => el.style.display = 'none');
         }
@@ -98,34 +109,6 @@
             document.getElementById('module-selection').style.display = 'none';
             document.getElementById('acc-input-container').style.display = 'block';
         }
-        /*
-        function acc_calculateLicense() {
-            let quantity = parseInt(document.getElementById('acc-quantity').value);
-            let license;
-            let multi=0;
-            let op;
-            if (quantity <= 0) {
-                license = 'No necesita licencias de este módulo';
-            } else if (quantity <= 5) {
-                license = 'Licencia de 5 puertas (No ampliable)';
-            } else if (quantity <= 10) {
-                license = 'Licencia de 10 puertas (No ampliable)';
-            } else if (quantity <= 25) {
-                license = 'Licencia de 25 puertas - ' + 'ZKT0740044';
-            } else if (quantity > 25) {
-                license = 'Licencia de 25 puertas - ' + '';
-            } else if (quantity <= 50) {
-                for (let index = 0; index < 1; multi++) {
-                    op=(quantity-50);
-                }
-                license = 'xxxxx';
-            } else {
-                license = 'Más de 250 puertas, requiere evaluación de proyecto';
-            }
-            document.getElementById('result').textContent = 'Licencia recomendada: ' + license;
-            document.getElementById('acc-input-container').style.display = 'none';
-            document.getElementById('result-container').style.display = 'block';
-        }*/
         function acc_calculateLicense() {
             let quantity = parseInt(document.getElementById('acc-quantity').value);
 
@@ -147,9 +130,9 @@
                 { size: 50, code: 'ZKT0740045', expandable: true },
                 { size: 75, code: 'ZKT0740046', expandable: true },
                 { size: 100, code: 'ZKT0740047', expandable: true },
-                { size: 150, code: 'ZKT0740048', expandable: true },
-                { size: 200, code: 'ZKT0740050', expandable: true },
-                { size: 250, code: 'ZKT0740051', expandable: true }
+                { size: 150, code: 'ZKT0740119', expandable: true },
+                { size: 200, code: 'ZKT0740118', expandable: true },
+                { size: 250, code: 'ZKT0740115', expandable: true }
             ];
 
             let bestOption = null;
@@ -419,6 +402,57 @@
             hideAll();
             document.getElementById('result').textContent = '';
         }
+
+        function saveSelection(moduleName) {
+
+            if (!currentResult || currentResult === "PROYECTO") return;
+
+            savedSelections[moduleName] = currentResult;
+
+            renderCart();
+        }
+
+        function renderCart() {
+
+            const container = document.getElementById('cart-container');
+            container.innerHTML = '';
+
+            let hasItems = false;
+
+            for (let module in savedSelections) {
+
+                let item = savedSelections[module];
+
+                if (item !== null) {
+
+                    hasItems = true;
+
+                    let div = document.createElement('div');
+                    div.classList.add('cart-item');
+
+                    let text = `<b>${module.toUpperCase()}</b><br>`;
+                    text += `Licencia de ${item.base.size} - ${item.base.code}`;
+
+                    if (item.expansiones > 0) {
+                        text += ` + ${item.expansiones} x Licencia de 5`;
+                    }
+
+                    text += `<br><button onclick="removeSelection('${module}')">Eliminar</button>`;
+
+                    div.innerHTML = text;
+
+                    container.appendChild(div);
+                }
+            }
+
+            container.style.display = hasItems ? 'block' : 'none';
+        }
+
+        function removeSelection(moduleName) {
+            savedSelections[moduleName] = null;
+            renderCart();
+        }
+        
     </script>
 </body>
 </html>
