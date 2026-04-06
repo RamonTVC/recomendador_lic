@@ -109,10 +109,10 @@
                 license = 'Licencia de 10 puertas (No ampliable)';
             } else if (quantity <= 25) {
                 license = 'Licencia de 25 puertas - ' + 'ZKT0740044';
-            } else if (quantity <= 100) {
+            } else if (quantity <= 250) {
                 license = 'xxxxx';
             } else {
-                license = 'Más de 100 puertas, requiere evaluación de proyecto';
+                license = 'Más de 250 puertas, requiere evaluación de proyecto';
             }
             document.getElementById('result').textContent = 'Licencia recomendada: ' + license;
             document.getElementById('acc-input-container').style.display = 'none';
