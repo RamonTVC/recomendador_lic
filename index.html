@@ -87,7 +87,7 @@
         <button onclick="goToMainMenu()">Volver al menú principal</button>
         <button onclick="saveSelection(currentModule)">Guardar selección</button>
     </div>
-    <div id="cart-container" style="display:none; margin-top: 100px;">
+    <div id="cart-container" style="display:none; margin-top: 80px;">
         <h3>Selección actual</h3>
     </div>
     
@@ -104,7 +104,7 @@
 
         function hideAll() {
             document.querySelectorAll('.input-container, .result-container')
-                .forEach(el => el.style.display = 'none');
+            .forEach(el => el.style.display = 'none');
         }
 
         const ACC_BASES = [
@@ -119,13 +119,22 @@
             { size: 250, code: 'ZKT0740051', expandable: true }
         ];
 
-        function calculateLicense(quantity, bases) {
+        const ASIS_BASES = [
+            { size: 5, code: 'ZKT0820112', expandable: false },
+            { size: 10, code: 'ZKT0820113', expandable: false },
+            { size: 25, code: 'ZKT0820114', expandable: true },
+            { size: 50, code: 'ZKT0820115', expandable: true },
+            { size: 75, code: 'ZKT0820116', expandable: true },
+            { size: 100, code: 'ZKT0820117', expandable: true }
+        ];
+
+        function calculateLicense(quantity, bases, maxLimit) {
 
             if (isNaN(quantity) || quantity <= 0) {
                 return null;
             }
 
-            if (quantity > 250) {
+            if (quantity > maxLimit) {
                 return "PROYECTO";
             }
 
@@ -164,20 +173,20 @@
             return bestOption;
         }
 
-        function formatResult(option) {
+        function formatResult(option, label = "puertas") {
 
             if (option === null) {
                 return 'No necesita licencias de este módulo';
             }
 
             if (option === "PROYECTO") {
-                return 'Más de 250 puertas, requiere evaluación de proyecto';
+                return 'Requiere evaluación de proyecto';
             }
 
-            let text = `Licencia de ${option.base.size} puertas - ${option.base.code}`;
+            let text = `Licencia de ${option.base.size} ${label} - ${option.base.code}`;
 
             if (option.expansiones > 0) {
-                text += ` + ${option.expansiones} Licencia(s) de aumento de 5 puertas - ZKT0740049`;
+                text += ` + ${option.expansiones} Licencia(s) de aumento de 5 ${label} - ZKT0740049`;
             }
 
             return text;
@@ -190,17 +199,38 @@
             currentModule = 'acceso';
         }
 
+        function asis_selectModule() {
+            hideAll();
+            currentModule = 'asistencia';
+            document.getElementById('module-selection').style.display = 'none';
+            document.getElementById('asis-input-container').style.display = 'block';
+        }
+
         function acc_calculateLicense() {
 
             let quantity = parseInt(document.getElementById('acc-quantity').value);
 
-            currentResult = calculateLicense(quantity, ACC_BASES);
+            currentResult = calculateLicense(quantity, ACC_BASES, 250);
 
-            let text = formatResult(currentResult);
+            let text = formatResult(currentResult, "puertas");
 
             document.getElementById('result').textContent = 'Licencia recomendada: ' + text;
 
             document.getElementById('acc-input-container').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+        }
+
+        function asis_calculateLicense() {
+
+            let quantity = parseInt(document.getElementById('asis-quantity').value);
+
+            currentResult = calculateLicense(quantity, ASIS_BASES, 100);
+
+            let text = formatResult(currentResult, "puntos de asistencia");
+
+            document.getElementById('result').textContent = 'Licencia recomendada: ' + text;
+
+            document.getElementById('asis-input-container').style.display = 'none';
             document.getElementById('result-container').style.display = 'block';
         }
 
@@ -228,6 +258,14 @@
 
                     hasItems = true;
 
+                    alert(module);
+
+                    if(module='acceso';){
+                        alert(module);
+                    }else{
+                        alert("sepa la bola");
+                    }
+
                     let div = document.createElement('div');
                     div.classList.add('cart-item');
 
@@ -235,7 +273,7 @@
                     text += `Licencia de ${item.base.size} - ${item.base.code}`;
 
                     if (item.expansiones > 0) {
-                        text += ` + ${item.expansiones} x Licencia de 5`;
+                        text += ` + ${item.expansiones} x Licencia de 5 - ${item.base}`;
                     }
 
                     text += `<br><button onclick="removeSelection('${module}')">Eliminar</button>`;
