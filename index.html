@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recomendador de Licencias ZKTeco</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        .question-container, .input-container, .result-container { margin: 20px 0; display: none; }
+        button { padding: 10px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Recomendador de Licencias ZKTeco</h1>
+    
+    <div id="module-selection">
+        <p>Seleccione un módulo:</p>
+        <button onclick="acc_selectModule()">Acceso</button>
+        <button onclick="asis_selectModule()">Asistencia</button>
+        <button onclick="vis_selectModule()">Visitas</button>
+        <button onclick="ele_selectModule()">Elevador</button>
+        <button onclick="est_selectModule()">Estacionamiento</button>
+        <button onclick="vid_selectModule()">Video</button>
+        <button onclick="hot_selectModule()">Hotelero</button>
+        <button onclick="pat_selectModule()">Patullaje</button>
+        <button onclick="loc_selectModule()">Locker</button>
+    </div>
+    
+    <div id="question-containers">
+        <div class="input-container" id="acc-input-container">                  <!-- Acceso -->
+            <p>Ingrese la cantidad de puertas requeridas:</p>
+            <input type="number" id="acc-quantity" min="1" value="1">
+            <button onclick="acc_calculateLicense()">Calcular</button>
+        </div>
+        
+        <div class="input-container" id="asis-input-container">                 <!-- Asistencia -->
+            <p>Ingrese la cantidad de empleados a gestionar:</p>
+            <input type="number" id="asis-quantity" min="1" value="1">
+            <button onclick="asis_calculateLicense()">Calcular</button>
+        </div>
+        
+        <div class="input-container" id="vis-input-container">                  <!-- Visitas -->
+            <p>Ingrese la cantidad de visitas esperadas:</p>
+            <input type="number" id="vis-quantity" min="1" value="1">
+            <button onclick="vis_calculateLicense()">Calcular</button>
+        </div>
+
+        <div class="input-container" id="ele-input-container">                  <!-- Elevador -->
+            <p>Ingrese la cantidad de visitas esperadas:</p>
+            <input type="number" id="ele-quantity" min="1" value="1">
+            <button onclick="ele_calculateLicense()">Calcular</button>
+        </div>
+
+        <div class="input-container" id="est-input-container">                  <!-- Estacionamiento -->
+            <p>Ingrese la cantidad de visitas esperadas:</p>
+            <input type="number" id="est-quantity" min="1" value="1">
+            <button onclick="est_calculateLicense()">Calcular</button>
+        </div>
+
+        <div class="input-container" id="vid-input-container">                  <!-- Video -->
+            <p>Ingrese la cantidad de visitas esperadas:</p>
+            <input type="number" id="vid-quantity" min="1" value="1">
+            <button onclick="vid_calculateLicense()">Calcular</button>
+        </div>
+
+        <div class="input-container" id="hot-input-container">                  <!-- Hotelero -->
+            <p>Ingrese la cantidad de visithoeleroas esperadas:</p>
+            <input type="number" id="hot-quantity" min="1" value="1">
+            <button onclick="hot_calculateLicense()">Calcular</button>
+        </div>
+
+        <div class="input-container" id="pat-input-container">                  <!-- Patrullaje -->
+            <p>Ingrese la cantidad de visitas esperadas:</p>
+            <input type="number" id="pat-quantity" min="1" value="1">
+            <button onclick="pat_calculateLicense()">Calcular</button>
+        </div>
+
+        <div class="input-container" id="loc-input-container">                  <!-- Locker -->
+            <p>Ingrese la cantidad de visitlockeras esperadas:</p>
+            <input type="number" id="loc-quantity" min="1" value="1">
+            <button onclick="loc_calculateLicense()">Calcular</button>
+        </div>
+    </div>
+    
+    <div id="result-container" class="result-container">
+        <p id="result"></p>
+        <button onclick="goToMainMenu()">Volver al menú principal</button>
+    </div>
+    
+    <script>
+        function hideAll() {
+            document.querySelectorAll('.question-container, .input-container, .result-container').forEach(el => el.style.display = 'none');
+        }
+        //-----------------------------------------------------------------------------------------------------------------Módulo de Acceso
+        function acc_selectModule() {
+            hideAll();
+            document.getElementById('module-selection').style.display = 'none';
+            document.getElementById('acc-input-container').style.display = 'block';
+        }
+
+        function acc_calculateLicense() {
+            let quantity = parseInt(document.getElementById('acc-quantity').value);
+            let license;
+            if (quantity <= 0) {
+                license = 'No necesita licencias de este módulo';
+            } else if (quantity <= 5) {
+                license = 'Licencia de 5 puertas (No ampliable)';
+            } else if (quantity <= 10) {
+                license = 'Licencia de 10 puertas (No ampliable)';
+            } else if (quantity <= 25) {
+                license = 'Licencia de 25 puertas - ' + 'ZKT0740044';
+            } else if (quantity <= 100) {
+                license = 'xxxxx';
+            } else {
+                license = 'Más de 100 puertas, requiere evaluación de proyecto';
+            }
+            document.getElementById('result').textContent = 'Licencia recomendada: ' + license;
+            document.getElementById('acc-input-container').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+        }
+        //-----------------------------------------------------------------------------------------------------------------Módulo de Asistencia
+        function asis_selectModule() {
+            hideAll();
+            document.getElementById('module-selection').style.display = 'none';
+            document.getElementById('asis-input-container').style.display = 'block';
+        }
+        function asis_calculateLicense() {
+            let quantity = parseInt(document.getElementById('asis-quantity').value);
+            let license;
+            if (quantity <= 0) {
+                license = 'No necesita licencias de este módulo';
+            } else if (quantity <= 5) {
+                license = 'Licencia de 5 puntos de asistencia (No ampliable)';
+            } else if (quantity <= 10) {
+                license = 'Licencia de 10 puntos de asistencia (No ampliable)';
+            } else if (quantity <= 25) {
+                license = 'Licencia de 25 puntos de asistencia - ' + 'ZKT0740044';
+            } else if (quantity <= 100) {
+                license = 'xxxxx';
+            } else {
+                license = 'Más de 100 puntos de asistencia, requiere evaluación de proyecto';
+            }
+            document.getElementById('result').textContent = 'Licencia recomendada: ' + license;
+            document.getElementById('asis-input-container').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+        }
+        //-----------------------------------------------------------------------------------------------------------------Módulo de Visitas
+        function vis_selectModule() {
+            hideAll();
+            document.getElementById('module-selection').style.display = 'none';
+            document.getElementById('vis-input-container').style.display = 'block';
+        }
+        function vis_calculateLicense() {
+            let quantity = parseInt(document.getElementById('vis-quantity').value);
+            let license;
+            if (quantity <= 0) {
+                license = 'No necesita licencias de este módulo';
+            } else if (quantity <= 5) {
+                license = 'Licencia de 5 puertas (No ampliable)';
+            } else if (quantity <= 10) {
+                license = 'Licencia de 10 puertas (No ampliable)';
+            } else if (quantity <= 25) {
+                license = 'Licencia de 25 puertas - ' + 'ZKT0740044';
+            } else if (quantity <= 100) {
+                license = 'xxxxx';
+            } else {
+                license = 'Más de 100 puertas, requiere evaluación de proyecto';
+            }
+            document.getElementById('result').textContent = 'Licencia recomendada: ' + license;
+            document.getElementById('vis-input-container').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+        }
+        //-----------------------------------------------------------------------------------------------------------------Módulo de Elevador
+        function ele_selectModule() {
+            hideAll();
+            document.getElementById('module-selection').style.display = 'none';
+            document.getElementById('ele-input-container').style.display = 'block';
+        }
+
+        function ele_calculateLicense() {
+            let quantity = parseInt(document.getElementById('ele-quantity').value);
+            let license;
+            if (quantity <= 0) {
+                license = 'No necesita licencias de este módulo';
+            } else if (quantity <= 5) {
+                license = 'Licencia de 5 puertas (No ampliable)';
+            } else if (quantity <= 10) {
+                license = 'Licencia de 10 puertas (No ampliable)';
+            } else if (quantity <= 25) {
+                license = 'Licencia de 25 puertas - ' + 'ZKT0740044';
+            } else if (quantity <= 100) {
+                license = 'xxxxx';
+            } else {
+                license = 'Más de 100 puertas, requiere evaluación de proyecto';
+            }
+            document.getElementById('result').textContent = 'Licencia recomendada: ' + license;
+            document.getElementById('ele-input-container').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+        }
+        //-----------------------------------------------------------------------------------------------------------------Módulo de Estacionamiento
+        function est_selectModule() {
+            hideAll();
+            document.getElementById('module-selection').style.display = 'none';
+            document.getElementById('est-input-container').style.display = 'block';
+        }
+
+        function est_calculateLicense() {
+            let quantity = parseInt(document.getElementById('est-quantity').value);
+            let license;
+            if (quantity <= 0) {
+                license = 'No necesita licencias de este módulo';
+            } else if (quantity <= 5) {
+                license = 'Licencia de 5 puertas (No ampliable)';
+            } else if (quantity <= 10) {
+                license = 'Licencia de 10 puertas (No ampliable)';
+            } else if (quantity <= 25) {
+                license = 'Licencia de 25 puertas - ' + 'ZKT0740044';
+            } else if (quantity <= 100) {
+                license = 'xxxxx';
+            } else {
+                license = 'Más de 100 puertas, requiere evaluación de proyecto';
+            }
+            document.getElementById('result').textContent = 'Licencia recomendada: ' + license;
+            document.getElementById('est-input-container').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+        }
+        //-----------------------------------------------------------------------------------------------------------------Módulo de Video
+        function vid_selectModule() {
+            hideAll();
+            document.getElementById('module-selection').style.display = 'none';
+            document.getElementById('vid-input-container').style.display = 'block';
+        }
+
+        function vid_calculateLicense() {
+            let quantity = parseInt(document.getElementById('vid-quantity').value);
+            let license;
+            if (quantity <= 0) {
+                license = 'No necesita licencias de este módulo';
+            } else if (quantity <= 5) {
+                license = 'Licencia de 5 puertas (No ampliable)';
+            } else if (quantity <= 10) {
+                license = 'Licencia de 10 puertas (No ampliable)';
+            } else if (quantity <= 25) {
+                license = 'Licencia de 25 puertas - ' + 'ZKT0740044';
+            } else if (quantity <= 100) {
+                license = 'xxxxx';
+            } else {
+                license = 'Más de 100 puertas, requiere evaluación de proyecto';
+            }
+            document.getElementById('result').textContent = 'Licencia recomendada: ' + license;
+            document.getElementById('vid-input-container').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+        }
+        //-----------------------------------------------------------------------------------------------------------------Módulo Hotelero
+        function hot_selectModule() {
+            hideAll();
+            document.getElementById('module-selection').style.display = 'none';
+            document.getElementById('hot-input-container').style.display = 'block';
+        }
+
+        function hot_calculateLicense() {
+            let quantity = parseInt(document.getElementById('hot-quantity').value);
+            let license;
+            if (quantity <= 0) {
+                license = 'No necesita licencias de este módulo';
+            } else if (quantity <= 5) {
+                license = 'Licencia de 5 puertas (No ampliable)';
+            } else if (quantity <= 10) {
+                license = 'Licencia de 10 puertas (No ampliable)';
+            } else if (quantity <= 25) {
+                license = 'Licencia de 25 puertas - ' + 'ZKT0740044';
+            } else if (quantity <= 100) {
+                license = 'xxxxx';
+            } else {
+                license = 'Más de 100 puertas, requiere evaluación de proyecto';
+            }
+            document.getElementById('result').textContent = 'Licencia recomendada: ' + license;
+            document.getElementById('hot-input-container').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+        }
+        //-----------------------------------------------------------------------------------------------------------------Módulo de Patrullaje
+        function pat_selectModule() {
+            hideAll();
+            document.getElementById('module-selection').style.display = 'none';
+            document.getElementById('pat-input-container').style.display = 'block';
+        }
+
+        function pat_calculateLicense() {
+            let quantity = parseInt(document.getElementById('pat-quantity').value);
+            let license;
+            if (quantity <= 0) {
+                license = 'No necesita licencias de este módulo';
+            } else if (quantity <= 5) {
+                license = 'Licencia de 5 puertas (No ampliable)';
+            } else if (quantity <= 10) {
+                license = 'Licencia de 10 puertas (No ampliable)';
+            } else if (quantity <= 25) {
+                license = 'Licencia de 25 puertas - ' + 'ZKT0740044';
+            } else if (quantity <= 100) {
+                license = 'xxxxx';
+            } else {
+                license = 'Más de 100 puertas, requiere evaluación de proyecto';
+            }
+            document.getElementById('result').textContent = 'Licencia recomendada: ' + license;
+            document.getElementById('pat-input-container').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+        }
+        //-----------------------------------------------------------------------------------------------------------------Módulo de Locker
+        function loc_selectModule() {
+            hideAll();
+            document.getElementById('module-selection').style.display = 'none';
+            document.getElementById('loc-input-container').style.display = 'block';
+        }
+
+        function loc_calculateLicense() {
+            let quantity = parseInt(document.getElementById('loc-quantity').value);
+            let license;
+            if (quantity <= 0) {
+                license = 'No necesita licencias de este módulo';
+            } else if (quantity <= 5) {
+                license = 'Licencia de 5 puertas (No ampliable)';
+            } else if (quantity <= 10) {
+                license = 'Licencia de 10 puertas (No ampliable)';
+            } else if (quantity <= 25) {
+                license = 'Licencia de 25 puertas - ' + 'ZKT0740044';
+            } else if (quantity <= 100) {
+                license = 'xxxxx';
+            } else {
+                license = 'Más de 100 puertas, requiere evaluación de proyecto';
+            }
+            document.getElementById('result').textContent = 'Licencia recomendada: ' + license;
+            document.getElementById('loc-input-container').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+        }
+
+        function goToMainMenu() {
+            document.getElementById('module-selection').style.display = 'block';
+            hideAll();
+            document.getElementById('result').textContent = '';
+        }
+    </script>
+</body>
+</html>
