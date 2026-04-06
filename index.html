@@ -98,12 +98,160 @@
             elevadores: null,
             visitantes: null
         };
+
+        let currentResult = null;
+
+        const ACC_BASES = [
+            { size: 5, code: 'ZKT0740042', expandable: false },
+            { size: 10, code: 'ZKT0740043', expandable: false },
+            { size: 25, code: 'ZKT0740044', expandable: true },
+            { size: 50, code: 'ZKT0740045', expandable: true },
+            { size: 75, code: 'ZKT0740046', expandable: true },
+            { size: 100, code: 'ZKT0740047', expandable: true },
+            { size: 150, code: 'ZKT0740048', expandable: true },
+            { size: 200, code: 'ZKT0740050', expandable: true },
+            { size: 250, code: 'ZKT0740051', expandable: true }
+        ];
+
+        function calculateLicense(quantity, bases) {
+
+            if (isNaN(quantity) || quantity <= 0) {
+                return null;
+            }
+
+            if (quantity > 250) {
+                return "PROYECTO";
+            }
+
+            let bestOption = null;
+
+            bases.forEach(base => {
+                let expansiones = 0;
+                let total = base.size;
+
+                if (base.size < quantity) {
+                    if (!base.expandable) return;
+
+                    let faltante = quantity - base.size;
+                    expansiones = Math.ceil(faltante / 5);
+                    total = base.size + (expansiones * 5);
+                }
+
+                let sobrante = total - quantity;
+
+                let opcion = {
+                    base,
+                    expansiones,
+                    total,
+                    sobrante
+                };
+
+                if (
+                    bestOption === null ||
+                    sobrante < bestOption.sobrante ||
+                    (sobrante === bestOption.sobrante && expansiones < bestOption.expansiones)
+                ) {
+                    bestOption = opcion;
+                }
+            });
+
+            return bestOption;
+        }
+
+        function formatResult(option) {
+
+            if (option === null) {
+                return 'No necesita licencias de este módulo';
+            }
+
+            if (option === "PROYECTO") {
+                return 'Más de 250 puertas, requiere evaluación de proyecto';
+            }
+
+            let text = `Licencia de ${option.base.size} puertas - ${option.base.code}`;
+
+            if (option.expansiones > 0) {
+                text += ` + ${option.expansiones} Licencia(s) de aumento de 5 puertas - ZKT0740049`;
+            }
+
+            return text;
+        }
+
+        function acc_calculateLicense() {
+
+            let quantity = parseInt(document.getElementById('acc-quantity').value);
+
+            currentResult = calculateLicense(quantity, ACC_BASES);
+
+            let text = formatResult(currentResult);
+
+            document.getElementById('result').textContent = 'Licencia recomendada: ' + text;
+
+            document.getElementById('acc-input-container').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+        }
+
+        function saveSelection(moduleName) {
+
+            if (!currentResult || currentResult === "PROYECTO") return;
+
+            savedSelections[moduleName] = currentResult;
+
+            renderCart();
+        }
+
+        function renderCart() {
+
+            const container = document.getElementById('cart-container');
+            container.innerHTML = '';
+
+            let hasItems = false;
+
+            for (let module in savedSelections) {
+
+                let item = savedSelections[module];
+
+                if (item !== null) {
+
+                    hasItems = true;
+
+                    let div = document.createElement('div');
+                    div.classList.add('cart-item');
+
+                    let text = `<b>${module.toUpperCase()}</b><br>`;
+                    text += `Licencia de ${item.base.size} - ${item.base.code}`;
+
+                    if (item.expansiones > 0) {
+                        text += ` + ${item.expansiones} x Licencia de 5`;
+                    }
+
+                    text += `<br><button onclick="removeSelection('${module}')">Eliminar</button>`;
+
+                    div.innerHTML = text;
+
+                    container.appendChild(div);
+                }
+            }
+
+            container.style.display = hasItems ? 'block' : 'none';
+        }
+
+        function removeSelection(moduleName) {
+            savedSelections[moduleName] = null;
+            renderCart();
+        }
+        /*
+        let savedSelections = {
+            acceso: null,
+            asistencia: null,
+            elevadores: null,
+            visitantes: null
+        };
         let currentResult = null;
         function hideAll() {
             document.querySelectorAll('.question-container, .input-container, .result-container').forEach(el => el.style.display = 'none');
         }
         //-----------------------------------------------------------------------------------------------------------------Módulo de Acceso
-        
         function acc_selectModule() {
             hideAll();
             document.getElementById('module-selection').style.display = 'none';
@@ -181,7 +329,7 @@
             document.getElementById('result').textContent = 'Licencia recomendada: ' + text;
             document.getElementById('acc-input-container').style.display = 'none';
             document.getElementById('result-container').style.display = 'block';
-        }
+        }*/
         //-----------------------------------------------------------------------------------------------------------------Módulo de Asistencia
         function asis_selectModule() {
             hideAll();
@@ -401,56 +549,6 @@
             document.getElementById('module-selection').style.display = 'block';
             hideAll();
             document.getElementById('result').textContent = '';
-        }
-
-        function saveSelection(moduleName) {
-
-            if (!currentResult || currentResult === "PROYECTO") return;
-
-            savedSelections[moduleName] = currentResult;
-
-            renderCart();
-        }
-
-        function renderCart() {
-
-            const container = document.getElementById('cart-container');
-            container.innerHTML = '';
-
-            let hasItems = false;
-
-            for (let module in savedSelections) {
-
-                let item = savedSelections[module];
-
-                if (item !== null) {
-
-                    hasItems = true;
-
-                    let div = document.createElement('div');
-                    div.classList.add('cart-item');
-
-                    let text = `<b>${module.toUpperCase()}</b><br>`;
-                    text += `Licencia de ${item.base.size} - ${item.base.code}`;
-
-                    if (item.expansiones > 0) {
-                        text += ` + ${item.expansiones} x Licencia de 5`;
-                    }
-
-                    text += `<br><button onclick="removeSelection('${module}')">Eliminar</button>`;
-
-                    div.innerHTML = text;
-
-                    container.appendChild(div);
-                }
-            }
-
-            container.style.display = hasItems ? 'block' : 'none';
-        }
-
-        function removeSelection(moduleName) {
-            savedSelections[moduleName] = null;
-            renderCart();
         }
         
     </script>
