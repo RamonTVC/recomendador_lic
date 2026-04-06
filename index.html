@@ -85,7 +85,7 @@
     <div id="result-container" class="result-container">
         <p id="result"></p>
         <button onclick="goToMainMenu()">Volver al menú principal</button>
-        <button onclick="saveSelection('acceso')">Guardar selección</button>
+        <button onclick="saveSelection(currentModule)">Guardar selección</button>
     </div>
     <div id="cart-container" style="display:none; margin-top: 30px;">
         <h3>Selección actual</h3>
@@ -99,7 +99,13 @@
             visitantes: null
         };
 
+        let currentModule = null;
         let currentResult = null;
+
+        function hideAll() {
+            document.querySelectorAll('.input-container, .result-container')
+                .forEach(el => el.style.display = 'none');
+        }
 
         const ACC_BASES = [
             { size: 5, code: 'ZKT0740042', expandable: false },
@@ -181,6 +187,7 @@
             hideAll();
             document.getElementById('module-selection').style.display = 'none';
             document.getElementById('acc-input-container').style.display = 'block';
+            currentModule = 'acceso';
         }
 
         function acc_calculateLicense() {
@@ -552,8 +559,8 @@
         }
 
         function goToMainMenu() {
-            document.getElementById('module-selection').style.display = 'block';
             hideAll();
+            document.getElementById('module-selection').style.display = 'block';
             document.getElementById('result').textContent = '';
         }
         
