@@ -11,7 +11,7 @@
     </style>
 </head>
 <body>
-    <h1>Recomendador de Licencias ZKTeco</h1>
+    <h1>Recomendador de Licencias ZKBio CVSecurity</h1>
     
     <div id="module-selection">
         <p>Seleccione un módulo:</p>
@@ -265,7 +265,6 @@
                         morita="puertas";
                     } else if (module==='asistencia'){
                         alert(module);
-                        alert('${mango} abers');
                         mango="ZKT0820118";
                         morita="puntos de asistencia"
                     } else {
@@ -297,122 +296,7 @@
             savedSelections[moduleName] = null;
             renderCart();
         }
-        /*
-        let savedSelections = {
-            acceso: null,
-            asistencia: null,
-            elevadores: null,
-            visitantes: null
-        };
-        let currentResult = null;
-        function hideAll() {
-            document.querySelectorAll('.question-container, .input-container, .result-container').forEach(el => el.style.display = 'none');
-        }
-        //-----------------------------------------------------------------------------------------------------------------Módulo de Acceso
-        function acc_selectModule() {
-            hideAll();
-            document.getElementById('module-selection').style.display = 'none';
-            document.getElementById('acc-input-container').style.display = 'block';
-        }
-        function acc_calculateLicense() {
-            let quantity = parseInt(document.getElementById('acc-quantity').value);
 
-            if (isNaN(quantity) || quantity <= 0) {
-                showResult('No necesita licencias de este módulo');
-                return;
-            }
-
-            if (quantity > 250) {
-                showResult('Más de 250 puertas, requiere evaluación de proyecto');
-                return;
-            }
-
-            // Licencias base
-            const bases = [
-                { size: 5, code: 'ZKT0740042', expandable: false },
-                { size: 10, code: 'ZKT0740043', expandable: false },
-                { size: 25, code: 'ZKT0740044', expandable: true },
-                { size: 50, code: 'ZKT0740045', expandable: true },
-                { size: 75, code: 'ZKT0740046', expandable: true },
-                { size: 100, code: 'ZKT0740047', expandable: true },
-                { size: 150, code: 'ZKT0740119', expandable: true },
-                { size: 200, code: 'ZKT0740118', expandable: true },
-                { size: 250, code: 'ZKT0740115', expandable: true }
-            ];
-
-            let bestOption = null;
-
-            bases.forEach(base => {
-                let expansiones = 0;
-                let total = base.size;
-
-                if (base.size < quantity) {
-                    if (!base.expandable) return;
-
-                    let faltante = quantity - base.size;
-                    expansiones = Math.ceil(faltante / 5);
-                    total = base.size + (expansiones * 5);
-                }
-
-                let sobrante = total - quantity;
-
-                let opcion = {
-                    base: base,
-                    expansiones: expansiones,
-                    total: total,
-                    sobrante: sobrante
-                };
-
-                if (
-                    bestOption === null ||
-                    sobrante < bestOption.sobrante ||
-                    (sobrante === bestOption.sobrante && expansiones < bestOption.expansiones)
-                ) {
-                    bestOption = opcion;
-                }
-            });
-
-            // Construcción del texto
-            let resultText = `Licencia de ${bestOption.base.size} puertas - ${bestOption.base.code}`;
-
-            if (bestOption.expansiones > 0) {
-                resultText += ` + ${bestOption.expansiones} Licencia(s) de aumento de 5 puertas - ZKT0740049`;
-            }
-
-            showResult(resultText);
-        }
-
-        function showResult(text) {
-            document.getElementById('result').textContent = 'Licencia recomendada: ' + text;
-            document.getElementById('acc-input-container').style.display = 'none';
-            document.getElementById('result-container').style.display = 'block';
-        }
-        //-----------------------------------------------------------------------------------------------------------------Módulo de Asistencia
-        function asis_selectModule() {
-            hideAll();
-            document.getElementById('module-selection').style.display = 'none';
-            document.getElementById('asis-input-container').style.display = 'block';
-        }
-        function asis_calculateLicense() {
-            let quantity = parseInt(document.getElementById('asis-quantity').value);
-            let license;
-            if (quantity <= 0) {
-                license = 'No necesita licencias de este módulo';
-            } else if (quantity <= 5) {
-                license = 'Licencia de 5 puntos de asistencia (No ampliable)';
-            } else if (quantity <= 10) {
-                license = 'Licencia de 10 puntos de asistencia (No ampliable)';
-            } else if (quantity <= 25) {
-                license = 'Licencia de 25 puntos de asistencia - ' + 'ZKT0740044';
-            } else if (quantity <= 100) {
-                license = 'xxxxx';
-            } else {
-                license = 'Más de 100 puntos de asistencia, requiere evaluación de proyecto';
-            }
-            document.getElementById('result').textContent = 'Licencia recomendada: ' + license;
-            document.getElementById('asis-input-container').style.display = 'none';
-            document.getElementById('result-container').style.display = 'block';
-        }*/
         //-----------------------------------------------------------------------------------------------------------------Módulo de Visitas
         function vis_selectModule() {
             hideAll();
