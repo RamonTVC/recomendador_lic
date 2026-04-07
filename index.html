@@ -173,7 +173,7 @@
             return bestOption;
         }
 
-        function formatResult(option, label = "puertas") {
+        function formatResult(option, label) {
 
             if (option === null) {
                 return 'No necesita licencias de este módulo';
@@ -258,13 +258,16 @@
 
                     hasItems = true;
                     let mango;
+                    let morita;
                     if(module==='acceso'){
                         alert(module);
                         mango="ZKT0740049";
+                        morita="puertas";
                     } else if (module==='asistencia'){
                         alert(module);
-                        alert("abers");
+                        alert(mango+"abers");
                         mango="ZKT0820118";
+                        morita="puntos de asistencia"
                     } else {
                         alert('sepa la bola :O');
                     }
@@ -273,10 +276,10 @@
                     div.classList.add('cart-item');
 
                     let text = `<br><b>${module.toUpperCase()}</b><br>`;
-                    text += `Licencia de ${item.base.size} - ${item.base.code}`;
+                    text += `Licencia de ${item.base.size} ${morita} - ${item.base.code}`;
 
                     if (item.expansiones > 0) {
-                        text += ` + ${item.expansiones} x Licencia de 5 - ${mango}`;
+                        text += ` + ${item.expansiones} x Licencia de 5  ${morita} - ${mango}`;
                     }
 
                     text += `<br><button onclick="removeSelection('${module}')">Eliminar</button>`;
