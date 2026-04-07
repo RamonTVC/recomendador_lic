@@ -40,8 +40,10 @@
         </div>
         
         <div class="input-container" id="vis-input-container">                  <!-- Visitas -->
-            <p>Ingrese la cantidad de visitas esperadas:</p>
-            <input type="number" id="vis-quantity" min="1" value="1">
+            <<p>Ingrese la cantidad de visitas mensuales:</p>
+            <input type="number" id="vis-visits" min="1" value="1">
+            <p>Ingrese la cantidad de sitios:</p>
+            <input type="number" id="vis-sites" min="1" value="1">
             <button onclick="vis_calculateLicense()">Calcular</button>
         </div>
 
@@ -95,8 +97,13 @@
         let savedSelections = {
             acceso: null,
             asistencia: null,
+            visitantes: null,
             elevadores: null,
-            visitantes: null
+            estacionamiento: null,
+            video: null,
+            hotelero:null,
+            patrullaje:null,
+            locker:null
         };
 
         let currentModule = null;
@@ -126,6 +133,18 @@
             { size: 50, code: 'ZKT0820115', expandable: true },
             { size: 75, code: 'ZKT0820116', expandable: true },
             { size: 100, code: 'ZKT0820117', expandable: true }
+        ];
+
+        const VIS_BASES = [
+            { visits: 5000, sites: 1, code: 'VIS001' },
+            { visits: 10000, sites: 3, code: 'VIS002' },
+            { visits: 20000, sites: 3, code: 'VIS003' },
+            { visits: 10000, sites: 5, code: 'VIS004' },
+            { visits: 20000, sites: 5, code: 'VIS005' },
+            { visits: 40000, sites: 5, code: 'VIS006' },
+            { visits: 20000, sites: 10, code: 'VIS007' },
+            { visits: 40000, sites: 10, code: 'VIS008' },
+            { visits: 80000, sites: 10, code: 'VIS009' }
         ];
 
         function calculateLicense(quantity, bases, maxLimit) {
@@ -286,6 +305,12 @@
                     div.innerHTML = text;
 
                     container.appendChild(div);
+
+                    if (item.visits) {
+                        text += `Licencia de ${item.visits} visitas, ${item.sites} sitio(s)`;
+                    } else {
+                        text += `Licencia de ${item.base.size} - ${item.base.code}`;
+                    }
                 }
             }
 
@@ -298,30 +323,73 @@
         }
 
         //-----------------------------------------------------------------------------------------------------------------Módulo de Visitas
-        function vis_selectModule() {
-            hideAll();
-            document.getElementById('module-selection').style.display = 'none';
-            document.getElementById('vis-input-container').style.display = 'block';
-        }
-        function vis_calculateLicense() {
-            let quantity = parseInt(document.getElementById('vis-quantity').value);
-            let license;
-            if (quantity <= 0) {
-                license = 'No necesita licencias de este módulo';
-            } else if (quantity <= 5) {
-                license = 'Licencia de 5 puertas (No ampliable)';
-            } else if (quantity <= 10) {
-                license = 'Licencia de 10 puertas (No ampliable)';
-            } else if (quantity <= 25) {
-                license = 'Licencia de 25 puertas - ' + 'ZKT0740044';
-            } else if (quantity <= 100) {
-                license = 'xxxxx';
-            } else {
-                license = 'Más de 100 puertas, requiere evaluación de proyecto';
+        function calculateVisitors(visitsRequired, sitesRequired) {
+
+            if (isNaN(visitsRequired) || visitsRequired <= 0 ||
+                isNaN(sitesRequired) || sitesRequired <= 0) {
+                return null;
             }
-            document.getElementById('result').textContent = 'Licencia recomendada: ' + license;
+
+            let bestOption = null;
+
+            VIS_BASES.forEach(option => {
+
+                if (option.visits >= visitsRequired && option.sites >= sitesRequired) {
+
+                    let sobranteVisitas = option.visits - visitsRequired;
+                    let sobranteSitios = option.sites - sitesRequired;
+
+                    let score = sobranteVisitas + (sobranteSitios * 10000); 
+                    // peso mayor a sitios
+
+                    if (
+                        bestOption === null ||
+                        score < bestOption.score
+                    ) {
+                        bestOption = {
+                            ...option,
+                            score
+                        };
+                    }
+                }
+            });
+
+            return bestOption || "PROYECTO";
+        }
+
+        function formatVisitors(option) {
+
+            if (option === null) {
+                return 'No necesita licencias de este módulo';
+            }
+
+            if (option === "PROYECTO") {
+                return 'Requiere evaluación de proyecto';
+            }
+
+            return `Licencia de ${option.visits} visitas mensuales, ${option.sites} sitio(s) - ${option.code}`;
+        }
+
+        function vis_calculateLicense() {
+
+            let visits = parseInt(document.getElementById('vis-visits').value);
+            let sites = parseInt(document.getElementById('vis-sites').value);
+
+            currentResult = calculateVisitors(visits, sites);
+
+            let text = formatVisitors(currentResult);
+
+            document.getElementById('result').textContent = 'Licencia recomendada: ' + text;
+
             document.getElementById('vis-input-container').style.display = 'none';
             document.getElementById('result-container').style.display = 'block';
+        }
+
+        function vis_selectModule() {
+            hideAll();
+            currentModule = 'visitantes';
+            document.getElementById('module-selection').style.display = 'none';
+            document.getElementById('vis-input-container').style.display = 'block';
         }
         //-----------------------------------------------------------------------------------------------------------------Módulo de Elevador
         function ele_selectModule() {
