@@ -40,7 +40,7 @@
         </div>
         
         <div class="input-container" id="vis-input-container">                  <!-- Visitas -->
-            <<p>Ingrese la cantidad de visitas mensuales:</p>
+            <p>Ingrese la cantidad de visitas mensuales:</p>
             <input type="number" id="vis-visits" min="1" value="1">
             <p>Ingrese la cantidad de sitios:</p>
             <input type="number" id="vis-sites" min="1" value="1">
@@ -286,8 +286,11 @@
                         //alert(module);
                         mango="ZKT0820118";
                         morita="puntos de asistencia"
+                    } else if (module==='visitantes'){
+                        text += `Licencia de ${item.visits} visitas, ${item.sites} sitio(s)`;
                     } else {
                         alert('sepa la bola :O');
+                        alert(module);
                     }
 
                     let div = document.createElement('div');
@@ -307,7 +310,7 @@
                     container.appendChild(div);
 
                     if (item.visits) {
-                        text += `Licencia de ${item.visits} visitas, ${item.sites} sitio(s)`;
+                        
                     } else {
                         text += `Licencia de ${item.base.size} - ${item.base.code}`;
                     }
