@@ -147,6 +147,11 @@
             { visits: 80000, sites: 10, code: 'ZKT0740058' }
         ];
 
+        const ELE_LICENSE = {
+            size: 1,
+            code: 'ELE001' // ajusta al código real
+        };
+
         function calculateLicense(quantity, bases, maxLimit) {
 
             if (isNaN(quantity) || quantity <= 0) {
@@ -285,7 +290,10 @@
                     // 🔹 CASO VISITANTES
                     if (item.visits) {
                         text += `Licencia de ${item.visits} visitas mensuales, ${item.sites} sitio(s) - ${item.code}`;
-                    } 
+                    } // 🔹 CASO ELEVADORES
+                    else if (item.quantity) {
+                        text += `${item.quantity} Licencia(s) de elevador - ${item.code}`;
+                    }
                     // 🔹 CASO ACCESO / ASISTENCIA
                     else {
                         let mango = '';
@@ -391,31 +399,54 @@
             document.getElementById('vis-input-container').style.display = 'block';
         }
         //-----------------------------------------------------------------------------------------------------------------Módulo de Elevador
-        function ele_selectModule() {
-            hideAll();
-            document.getElementById('module-selection').style.display = 'none';
-            document.getElementById('ele-input-container').style.display = 'block';
+        function calculateElevators(quantity) {
+
+            if (isNaN(quantity) || quantity <= 0) {
+                return null;
+            }
+
+            if (quantity > 10) {
+                return "PROYECTO";
+            }
+
+            return {
+                quantity: quantity,
+                code: ELE_LICENSE.code
+            };
+        }
+
+        function formatElevators(option) {
+
+            if (option === null) {
+                return 'No necesita licencias de este módulo';
+            }
+
+            if (option === "PROYECTO") {
+                return 'Más de 10 elevadores, requiere evaluación de proyecto';
+            }
+
+            return `${option.quantity} Licencia(s) de elevador - ${option.code}`;
         }
 
         function ele_calculateLicense() {
+
             let quantity = parseInt(document.getElementById('ele-quantity').value);
-            let license;
-            if (quantity <= 0) {
-                license = 'No necesita licencias de este módulo';
-            } else if (quantity <= 5) {
-                license = 'Licencia de 5 puertas (No ampliable)';
-            } else if (quantity <= 10) {
-                license = 'Licencia de 10 puertas (No ampliable)';
-            } else if (quantity <= 25) {
-                license = 'Licencia de 25 puertas - ' + 'ZKT0740044';
-            } else if (quantity <= 100) {
-                license = 'xxxxx';
-            } else {
-                license = 'Más de 100 puertas, requiere evaluación de proyecto';
-            }
-            document.getElementById('result').textContent = 'Licencia recomendada: ' + license;
+
+            currentResult = calculateElevators(quantity);
+
+            let text = formatElevators(currentResult);
+
+            document.getElementById('result').textContent = 'Licencia recomendada: ' + text;
+
             document.getElementById('ele-input-container').style.display = 'none';
             document.getElementById('result-container').style.display = 'block';
+        }
+
+        function ele_selectModule() {
+            hideAll();
+            currentModule = 'elevadores';
+            document.getElementById('module-selection').style.display = 'none';
+            document.getElementById('ele-input-container').style.display = 'block';
         }
         //-----------------------------------------------------------------------------------------------------------------Módulo de Estacionamiento
         function est_selectModule() {
